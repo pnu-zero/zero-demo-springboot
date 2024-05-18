@@ -50,9 +50,7 @@ public class UserController {
         if(user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("USER", user);
-            HttpHeaders header = new HttpHeaders();
-            header.add(HttpHeaders.SET_COOKIE, "Secure; SameSite=None");
-            return ResponseEntity.ok().headers(header).body(user);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials.");
         }
