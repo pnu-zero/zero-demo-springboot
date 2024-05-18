@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +27,11 @@ public class UserController {
     public ResponseEntity<Long> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto, @RequestParam(value = "group_id", required = false) Long groupId) throws Exception {
         Long id = userService.createUser(signUpRequestDto, groupId);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
+    }
+
+    @GetMapping("api/host")
+    public String getHost(HttpServletRequest req) throws UnknownHostException {
+        return InetAddress.getLocalHost().getHostAddress();
     }
 
     @GetMapping("/api/user/activate")
