@@ -1,5 +1,6 @@
 package com.example.zero.annotation;
 
+import com.example.zero.user.domain.model.User;
 import com.example.zero.utils.SessionUtils;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -18,11 +19,9 @@ public class LoginAspect {
 
     @Before("@annotation(com.example.zero.annotation.LoginRequired)")
     public void memberLoginCheck(JoinPoint jp) throws Throwable {
-
         HttpSession session = ((ServletRequestAttributes)(RequestContextHolder.currentRequestAttributes())).getRequest().getSession();
-        Long userId = SessionUtils.getLoginUserId(session);
-
-        if (userId == null) {
+        User user = (User) session.getAttribute("USER");
+        if (user == null) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "NO_LOGIN") {};
         }
     }
