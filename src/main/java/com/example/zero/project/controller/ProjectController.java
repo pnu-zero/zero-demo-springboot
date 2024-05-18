@@ -5,10 +5,10 @@ import com.example.zero.annotation.LoginRequired;
 import com.example.zero.project.domain.model.Project;
 import com.example.zero.project.domain.model.ProjectDto;
 import com.example.zero.group.domain.model.enums.GroupAuthority;
+import com.example.zero.project.exception.InvalidGroupIdRequestException;
 import com.example.zero.project.service.ProjectService;
-import com.example.zero.user.domain.model.User;
+import com.example.zero.project.domain.model.ProjectWithUser;
 import com.example.zero.utils.SessionUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,8 +39,12 @@ public class ProjectController {
 
     @GetMapping("/find_by_group")
     @LoginRequired
-    public ResponseEntity<?> getAllProjectByGroup(@RequestParam("group_id") Long groupId){
-        List<ProjectDto> projectDtoList =  projectService.getProjectListByGroupId(groupId);
+    public ResponseEntity<?> getAllProjectByGroup(HttpSession session, @RequestParam("group_id") Long groupId){
+        Long loginUserGroupId = SessionUtils.getLoginUserGroupId(session);
+        if (!Objects.equals(loginUserGroupId, groupId)){
+            throw new InvalidGroupIdRequestException("본인이 속한 그룹 외 정보는 열람이 불가능합니다.");
+        }
+        List<ProjectWithUser> projectDtoList =  projectService.getProjectListByGroupId(groupId);
         return ResponseEntity.ok().body(projectDtoList);
     }
 
@@ -47,7 +52,7 @@ public class ProjectController {
     @LoginRequired
     public ResponseEntity<?> getProjectByUser(HttpSession session){
         Long userId = SessionUtils.getLoginUserId(session);
-        List<ProjectDto> projectDtoList =  projectService.getProjectListByUserId(userId);
+        List<ProjectWithUser> projectDtoList =  projectService.getProjectListByUserId(userId);
         return ResponseEntity.ok().body(projectDtoList);
     }
 

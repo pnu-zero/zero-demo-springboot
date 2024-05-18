@@ -3,8 +3,8 @@ package com.example.zero.project.service;
 import com.example.zero.project.domain.model.Project;
 import com.example.zero.project.domain.model.ProjectDto;
 import com.example.zero.group.domain.model.enums.GroupAuthority;
+import com.example.zero.project.domain.model.ProjectWithUser;
 import com.example.zero.project.domain.repository.ProjectRepository;
-import com.example.zero.project.exception.DuplicateSubDomainException;
 import com.example.zero.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,11 +37,11 @@ public class ProjectService {
         return Project.from(responseProjectDto);
     }
 
-    public List<ProjectDto> getProjectListByGroupId(Long groupId){
+    public List<ProjectWithUser> getProjectListByGroupId(Long groupId){
         return projectRepository.getProjectListByGroupId(groupId);
     }
 
-    public List<ProjectDto> getProjectListByUserId(Long userId){
+    public List<ProjectWithUser> getProjectListByUserId(Long userId){
         return projectRepository.getProjectListByUserId(userId);
     }
 

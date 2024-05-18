@@ -2,6 +2,7 @@ package com.example.zero.project.domain.repository;
 
 import com.example.zero.project.domain.model.ProjectDto;
 import com.example.zero.group.domain.model.enums.GroupAuthority;
+import com.example.zero.project.domain.model.ProjectWithUser;
 import com.example.zero.project.domain.repository.mapper.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,11 +14,11 @@ import java.util.List;
 public class ProjectRepository {
     private final ProjectMapper projectMapper;
 
-    public List<ProjectDto> getProjectListByGroupId(Long groupId) {
+    public List<ProjectWithUser> getProjectListByGroupId(Long groupId) {
         return projectMapper.getProjectsByGroupId(groupId);
     }
 
-    public List<ProjectDto> getProjectListByUserId(Long userId) {
+    public List<ProjectWithUser> getProjectListByUserId(Long userId) {
         return projectMapper.getProjectsByUserId(userId);
     }
 
