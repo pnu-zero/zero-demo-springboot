@@ -14,8 +14,12 @@ public class SessionUtils {
 
     public static Long getLoginUserId(HttpSession session) {
         User loginedUser = (User) session.getAttribute(LOGIN_USER);
-        log.info("loginedUser: {}", loginedUser);
         return loginedUser.getId();
+    }
+
+    public static Long getLoginUserGroupId(HttpSession session) {
+        User loginedUser = (User) session.getAttribute(LOGIN_USER);
+        return loginedUser.getGroup_id();
     }
 
     public static Boolean checkAdmin(HttpSession session) {

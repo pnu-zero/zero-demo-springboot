@@ -1,5 +1,6 @@
 package com.example.zero.base;
 
+import com.example.zero.project.exception.DuplicateSubDomainException;
 import com.example.zero.user.exception.InvalidRegisterException;
 import com.example.zero.user.exception.LoginException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,12 @@ public class GlobalExceptionHandler {
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+//    @ExceptionHandler(DuplicateSubDomainException.class)
+//    public ResponseEntity<ExceptionResponse> handleDuplicateSubDomainException(DuplicateSubDomainException ex) {
+//        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
+//        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ExceptionResponse> validException(MethodArgumentNotValidException ex) {

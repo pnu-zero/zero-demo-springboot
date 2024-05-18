@@ -3,9 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.zero.project.domain.repository.mapper.ProjectMapper">
-    <insert id="createProject" parameterType="com.example.zero.project.domain.model.CreateProjectRequestDto" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_src}, #{dynamic_file_src}, #{role}, now(), now())
+    <insert id="createProject" parameterType="com.example.zero.project.domain.model.ProjectDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_src}, #{dynamic_file_src}, now(), now())
     </insert>
+
+    <select id="selectSubDomain" parameterType="String" resultType="Long">
+        SELECT IFNULL(sub_domain, 0) FROM project WHERE sub_domain = #{subDomain}
+    </select>
 
     <select id="getProjectsByUserId" parameterType="Long" resultType="com.example.zero.project.domain.model.ProjectDto">
         SELECT id, user_id, group_id, title, `desc`, sub_domain FROM project WHERE user_id = #{userId}

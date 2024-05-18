@@ -2,10 +2,13 @@ package com.example.zero.project.controller;
 
 import com.example.zero.annotation.AdminRoleRequired;
 import com.example.zero.annotation.LoginRequired;
+import com.example.zero.project.domain.model.Project;
 import com.example.zero.project.domain.model.ProjectDto;
-import com.example.zero.project.domain.model.enums.ProjectRole;
+import com.example.zero.group.domain.model.enums.GroupAuthority;
 import com.example.zero.project.service.ProjectService;
+import com.example.zero.user.domain.model.User;
 import com.example.zero.utils.SessionUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +27,12 @@ public class ProjectController {
 
     @PostMapping
     @LoginRequired
-    public ResponseEntity<ProjectDto> createProject(@RequestPart(name = "projectDto") ProjectDto projectDto, @RequestPart(name = "staticFile", required = true) MultipartFile staticFile, @RequestPart(name = "dynamicFile", required = false) MultipartFile dynamicFile) throws IOException {
-        ProjectDto createdProject = projectService.createProject(projectDto, staticFile, dynamicFile);
+    public ResponseEntity<Project> createProject(HttpSession session, @RequestPart(name = "projectDto") ProjectDto projectDto, @RequestPart(name = "staticFile", required = true) MultipartFile staticFile, @RequestPart(name = "dynamicFile", required = false) MultipartFile dynamicFile) throws IOException {
+        Long userId = SessionUtils.getLoginUserId(session);
+        Long groupId =  SessionUtils.getLoginUserGroupId(session);
+        projectDto.setUser_id(userId);
+        projectDto.setGroup_id(groupId);
+        Project createdProject = projectService.createProject(projectDto, staticFile, dynamicFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
     }
 
@@ -54,7 +61,7 @@ public class ProjectController {
     @PutMapping("/role")
     @LoginRequired
     @AdminRoleRequired
-    public ResponseEntity<Boolean> updateRole(@RequestParam("project_id") Long projectId, @RequestParam("role") ProjectRole role){
+    public ResponseEntity<Boolean> updateRole(@RequestParam("project_id") Long projectId, @RequestParam("role") GroupAuthority role){
         int result = projectService.updateProjectRole(projectId, role);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }

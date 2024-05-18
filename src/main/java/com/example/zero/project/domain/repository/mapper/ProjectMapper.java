@@ -1,8 +1,7 @@
 package com.example.zero.project.domain.repository.mapper;
 
-import com.example.zero.project.domain.model.CreateProjectRequestDto;
 import com.example.zero.project.domain.model.ProjectDto;
-import com.example.zero.project.domain.model.enums.ProjectRole;
+import com.example.zero.group.domain.model.enums.GroupAuthority;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,9 +13,11 @@ public interface ProjectMapper {
 
     List<ProjectDto> getProjectsByUserId(Long userId);
 
-    Long createProject(CreateProjectRequestDto projectDto);
+    boolean selectSubDomain(String subDomain);
 
-    int updateProjectRole(Long projectId, ProjectRole role);
+    Long createProject(ProjectDto projectDto);
+
+    int updateProjectRole(Long projectId, GroupAuthority role);
 
     void deleteProject(Long projectId);
 }

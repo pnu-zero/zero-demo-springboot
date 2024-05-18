@@ -1,8 +1,7 @@
 package com.example.zero.project.domain.repository;
 
-import com.example.zero.project.domain.model.CreateProjectRequestDto;
 import com.example.zero.project.domain.model.ProjectDto;
-import com.example.zero.project.domain.model.enums.ProjectRole;
+import com.example.zero.group.domain.model.enums.GroupAuthority;
 import com.example.zero.project.domain.repository.mapper.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,12 +21,16 @@ public class ProjectRepository {
         return projectMapper.getProjectsByUserId(userId);
     }
 
-    public ProjectDto createProject(CreateProjectRequestDto createProjectRequestDto) {
-        projectMapper.createProject(createProjectRequestDto);
-        return ProjectDto.fromCreateProjectDto(createProjectRequestDto);
+    public ProjectDto createProject(ProjectDto projectDto) {
+        projectMapper.createProject(projectDto);
+        return projectDto;
     }
 
-    public int updateProjectRole(Long projectId, ProjectRole role) {
+    public boolean isDuplicateSubdomainExist(String subDomain){
+        return projectMapper.selectSubDomain(subDomain);
+    }
+
+    public int updateProjectRole(Long projectId, GroupAuthority role) {
         return projectMapper.updateProjectRole(projectId, role);
     }
 
