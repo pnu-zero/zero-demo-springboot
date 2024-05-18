@@ -52,7 +52,7 @@ public class UserController {
             session.setAttribute("USER", user);
             String sessionKey = session.getId();
             HttpHeaders header = new HttpHeaders();
-            header.add("Cookie", "SESSION=" + sessionKey);
+            header.add(HttpHeaders.SET_COOKIE, "SESSION=" + sessionKey);
             return ResponseEntity.ok().headers(header).body(user);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials.");
