@@ -3,6 +3,7 @@ package com.example.zero.mail.service;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import org.thymeleaf.context.Context;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +20,14 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     private final TemplateEngine htmlTemplateEngine;
 
+    @Value("${server.port}")
+    private String port;
+
+    private final String protocol = "http://";
+
     private String generateActivationLink(String verificationCode, Long groupId, Long userId) throws UnknownHostException {
         String hostAddr = InetAddress.getLocalHost().getHostAddress();
-        return "http://localhost:8080/api/user/activate?auth_code=" + verificationCode + "&user_id=" + userId + "&group_id=" + groupId;
+        return protocol + hostAddr + ":" + port + "/api/user/activate?auth_code=" + verificationCode + "&user_id=" + userId + "&group_id=" + groupId;
     }
 
     public String sendAuthMail(String clientEmail, String verificationCode, Long groupId, Long userId) throws Exception {
