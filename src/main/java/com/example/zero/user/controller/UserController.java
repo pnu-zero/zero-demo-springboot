@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,13 +47,13 @@ public class UserController {
         String password = loginRequest.getPassword();
         User user = userService.authenticateUser(email, password);
 
-        log.info("ASDFASDFASd!!!1");
-        log.info(String.valueOf(user));
-
         if(user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("USER", user);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
+            String sessionKey = session.getId();
+            HttpHeaders header = new HttpHeaders();
+            header.add("Cookie", "SESSION=" + sessionKey);
+            return ResponseEntity.ok().headers(header).body(user);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials.");
         }
