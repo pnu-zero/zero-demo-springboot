@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.zero.project.domain.repository.mapper.ProjectMapper">
+    <insert id="createProject" parameterType="com.example.zero.project.domain.model.CreateProjectRequestDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_src}, #{dynamic_file_src}, #{role}, now(), now())
+    </insert>
+
+    <select id="getProjectsByUserId" parameterType="Long" resultType="com.example.zero.project.domain.model.ProjectDto">
+        SELECT id, user_id, group_id, title, `desc`, sub_domain FROM project WHERE user_id = #{userId}
+    </select>
+
+    <select id="getProjectsByGroupId" parameterType="Long" resultType="com.example.zero.project.domain.model.ProjectDto">
+        SELECT id, user_id, group_id, title, `desc`, sub_domain FROM project WHERE group_id = #{groupId}
+    </select>
+
+    <update id="updateProjectRole" parameterType="hashMap">
+        UPDATE project SET role = #{role} WHERE id = #{projectId}
+    </update>
+
+    <delete id="deleteProject" parameterType="Long">
+        DELETE FROM project WHERE id = #{userId}
+    </delete>
+</mapper>
