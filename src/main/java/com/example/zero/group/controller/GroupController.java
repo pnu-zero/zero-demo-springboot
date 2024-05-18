@@ -4,7 +4,9 @@ import com.example.zero.annotation.LoginRequired;
 import com.example.zero.group.domain.model.GroupDto;
 import com.example.zero.group.domain.model.GroupResponseDto;
 import com.example.zero.group.service.GroupService;
+import com.example.zero.user.domain.model.User;
 import com.example.zero.utils.SessionUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,9 @@ public class GroupController {
 
     @GetMapping("/find_by_user")
     @LoginRequired
-    public ResponseEntity<List<GroupResponseDto>> getGroupsByUserId(HttpSession session) {
-        Long userId = SessionUtils.getLoginUserId(session);
+    public ResponseEntity<List<GroupResponseDto>> getGroupsByUserId(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("USER");
+        Long userId = user.getId();
         List<GroupResponseDto> groupsByUserId = groupService.getAllGroupsByUserId(userId);
         return ResponseEntity.ok().body(groupsByUserId);
     }
