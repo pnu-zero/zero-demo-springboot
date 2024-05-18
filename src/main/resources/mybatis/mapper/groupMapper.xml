@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.zero.group.domain.repository.mapper.GroupMapper">
+    <insert id="save" parameterType="com.example.zero.group.domain.model.GroupDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `group` VALUES (0, #{class_name}, #{class_num}, #{password}, #{deadline}, now(), now())
+    </insert>
+
+    <insert id="makeRelation" parameterType="hashMap">
+        INSERT INTO group_member VALUES (#{userId}, #{groupId})
+    </insert>
+
+    <select id="findAllGroups" resultType="com.example.zero.group.domain.model.GroupResponseDto">
+        SELECT id, class_name, class_num, password, deadline FROM `group`
+    </select>
+
+    <select id="findGroupsByUserId" parameterType="long" resultType="com.example.zero.group.domain.model.GroupResponseDto">
+        SELECT id, class_name, class_num, password, deadline
+        FROM
+            `group` g
+            JOIN group_member gm ON g.id = gm.group_id
+            WHERE gm.user_id = #{userId}
+    </select>
+</mapper>
