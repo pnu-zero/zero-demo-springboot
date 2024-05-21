@@ -3,11 +3,10 @@ package com.example.zero.group.controller;
 import com.example.zero.annotation.LoginRequired;
 import com.example.zero.group.domain.model.GroupDto;
 import com.example.zero.group.domain.model.GroupResponseDto;
+import com.example.zero.group.domain.model.UpdateGroupPreferenceDto;
 import com.example.zero.group.service.GroupService;
 import com.example.zero.user.domain.model.User;
-import com.example.zero.utils.SessionUtils;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,8 +47,9 @@ public class GroupController {
 
     @PutMapping
     @LoginRequired
-    public ResponseEntity<GroupDto> editGroup(@RequestBody @Valid GroupDto groupDto) {
-        GroupDto createdGroup = groupService.createGroup(groupDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdGroup);
+    public ResponseEntity<Integer> editGroupPreference(@RequestBody UpdateGroupPreferenceDto groupDto) {
+        System.out.println(groupDto.getGroupId());
+        int createdGroup = groupService.updateGroupPreference(groupDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(createdGroup);
     }
 }

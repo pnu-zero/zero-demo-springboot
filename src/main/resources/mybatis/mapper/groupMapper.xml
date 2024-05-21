@@ -11,6 +11,10 @@
         INSERT INTO group_member VALUES (#{userId}, #{groupId})
     </insert>
 
+    <update id="updateGroupPreference" parameterType="com.example.zero.group.domain.model.UpdateGroupPreferenceDto">
+        UPDATE `group` SET deadline = #{deadline}, authority = #{authority} WHERE id = #{groupId}
+    </update>
+
     <select id="findAllGroups" resultType="com.example.zero.group.domain.model.GroupResponseDto">
         SELECT id, class_name, class_num, password, deadline, authority FROM `group`
     </select>

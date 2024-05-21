@@ -2,6 +2,7 @@ package com.example.zero.group.domain.repository;
 
 import com.example.zero.group.domain.model.GroupDto;
 import com.example.zero.group.domain.model.GroupResponseDto;
+import com.example.zero.group.domain.model.UpdateGroupPreferenceDto;
 import com.example.zero.group.domain.repository.mapper.GroupMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,10 @@ public class GroupRepository {
 
     public void createGroupUserRelation(Long userId, Long groupId){
         groupMapper.makeRelation(userId, groupId);
+    }
+
+    public int updateGroupPreference(UpdateGroupPreferenceDto updateGroupPreferenceDto){
+        return groupMapper.updateGroupPreference(updateGroupPreferenceDto);
     }
 
     public List<GroupResponseDto> findAllGroups() {

@@ -2,6 +2,7 @@ package com.example.zero.group.service;
 
 import com.example.zero.group.domain.model.GroupDto;
 import com.example.zero.group.domain.model.GroupResponseDto;
+import com.example.zero.group.domain.model.UpdateGroupPreferenceDto;
 import com.example.zero.group.domain.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,11 @@ public class GroupService {
 
     public List<GroupResponseDto> getAllGroupsByUserId(Long userId) {
         return groupRepository.findGroupsByUserId(userId);
+    }
+
+    public int updateGroupPreference(UpdateGroupPreferenceDto updateGroupPreferenceDto){
+        log.info(updateGroupPreferenceDto.getAuthority().getDescription());
+        return groupRepository.updateGroupPreference(updateGroupPreferenceDto);
     }
 
     @Transactional
