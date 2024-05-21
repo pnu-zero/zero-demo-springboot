@@ -12,11 +12,11 @@
     </insert>
 
     <select id="findAllGroups" resultType="com.example.zero.group.domain.model.GroupResponseDto">
-        SELECT id, class_name, class_num, password, deadline FROM `group`
+        SELECT id, class_name, class_num, password, deadline, authority FROM `group`
     </select>
 
     <select id="findGroupsByUserId" parameterType="long" resultType="com.example.zero.group.domain.model.GroupResponseDto">
-        SELECT id, class_name, class_num, password, deadline
+        SELECT id, class_name, class_num, password, deadline, authority
         FROM
             `group` g
             JOIN group_member gm ON g.id = gm.group_id
