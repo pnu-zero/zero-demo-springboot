@@ -1,5 +1,6 @@
 package com.example.zero.group.controller;
 
+import com.example.zero.annotation.AdminRoleRequired;
 import com.example.zero.annotation.LoginRequired;
 import com.example.zero.group.domain.model.GroupDto;
 import com.example.zero.group.domain.model.GroupResponseDto;
@@ -47,6 +48,7 @@ public class GroupController {
 
     @PutMapping
     @LoginRequired
+    @AdminRoleRequired
     public ResponseEntity<Integer> editGroupPreference(@RequestBody UpdateGroupPreferenceDto groupDto) {
         System.out.println(groupDto.getGroupId());
         int createdGroup = groupService.updateGroupPreference(groupDto);
