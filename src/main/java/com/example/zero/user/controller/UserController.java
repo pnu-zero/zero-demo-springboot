@@ -21,21 +21,17 @@ import java.net.UnknownHostException;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/api/user/signup")
+    @PostMapping("/signup")
     public ResponseEntity<Long> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto, @RequestParam(value = "group_id", required = false) Long groupId) throws Exception {
         Long id = userService.createUser(signUpRequestDto, groupId);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
-    @GetMapping("api/host")
-    public String getHost(HttpServletRequest req) throws UnknownHostException {
-        return InetAddress.getLocalHost().getHostAddress();
-    }
-
-    @GetMapping("/api/user/activate")
+    @GetMapping("/activate")
     public ResponseEntity<?> activateUser(@RequestParam("auth_code") String authCode, @RequestParam(value = "user_id", required = true) Long userId, @RequestParam(value = "group_id", required = false) Long groupId) {
         userService.activateUser(authCode, userId, groupId);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("계정이 활성화되었습니다.");
