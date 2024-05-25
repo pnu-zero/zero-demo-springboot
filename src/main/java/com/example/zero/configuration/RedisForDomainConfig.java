@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -19,19 +18,14 @@ import java.time.Duration;
 
 @Configuration
 @EnableRedisRepositories
-@EnableRedisHttpSession
-public class RedisConfig {
-    @Value("${spring.data.redis.port}")
+public class RedisForDomainConfig {
+    @Value("${spring.data.redis-for-domain.port}")
     private int port;
 
-    @Value("${spring.data.redis.host}")
+    @Value("${spring.data.redis-for-domain.host}")
     private String host;
 
-    @Value("${spring.data.redis.password}")
-    private String redisPassword;
-
-    @Bean("defaultLettuceClientConfiguration")
-    @Primary
+    @Bean("secondLettuceClientConfiguration")
     public LettuceClientConfiguration lettuceClientConfiguration() {
 
         return LettuceClientConfiguration
@@ -47,29 +41,25 @@ public class RedisConfig {
                 .build();
     }
 
-    @Bean("defaultRedisStandaloneConfiguration")
-    @Primary
+    @Bean("secondRedisStandaloneConfiguration")
     public RedisStandaloneConfiguration redisStandaloneConfiguration() {
 
         RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
         redisConfiguration.setHostName(host);
-        redisConfiguration.setPassword(redisPassword);
         redisConfiguration.setPort(port);
 
         return redisConfiguration;
     }
 
-    @Bean("defaultRedisConnectionFactory")
-    @Primary
-    public LettuceConnectionFactory redisConnectionFactory(@Qualifier("defaultRedisStandaloneConfiguration") RedisStandaloneConfiguration redisStandaloneConfiguration,@Qualifier("defaultLettuceClientConfiguration") LettuceClientConfiguration lettuceClientConfiguration) {
+    @Bean("secondLettuceConnectionFactory")
+    public LettuceConnectionFactory redisConnectionFactory(@Qualifier("secondRedisStandaloneConfiguration") RedisStandaloneConfiguration redisStandaloneConfiguration,@Qualifier("secondLettuceClientConfiguration") LettuceClientConfiguration lettuceClientConfiguration) {
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
         lettuceConnectionFactory.setValidateConnection(true);
         return lettuceConnectionFactory;
     }
 
-    @Bean("defaultRedisTemplate")
-    @Primary
-    public RedisTemplate<?, ?> redisTemplate(@Qualifier("defaultRedisConnectionFactory") LettuceConnectionFactory connectionFactory) {
+    @Bean("secondRedisTemplate")
+    public RedisTemplate<?, ?> redisTemplate(@Qualifier("secondLettuceConnectionFactory") LettuceConnectionFactory connectionFactory) {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
