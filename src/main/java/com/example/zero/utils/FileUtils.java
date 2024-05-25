@@ -1,8 +1,9 @@
 package com.example.zero.utils;
 
-import com.example.zero.project.domain.model.ProjectDto;
+
 import com.example.zero.project.exception.InvalidFileExtensionException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Component
 @Slf4j
 public class FileUtils {
 
@@ -40,7 +42,7 @@ public class FileUtils {
             fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
 
-        if (!fileExtension.equals("zip") && !fileExtension.equals("tar")) {
+        if (!fileExtension.equals(".zip") && !fileExtension.equals(".tar")) {
             throw new InvalidFileExtensionException("올바른 파일 형식이 아닙니다.");
         }
 
