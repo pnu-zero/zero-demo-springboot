@@ -15,8 +15,8 @@ import java.util.List;
 public class ProjectRepository {
     private final ProjectMapper projectMapper;
 
-    public ProjectDetail getProjectDetail(Long id) {
-        return projectMapper.getProjectDetail(id);
+    public ProjectDetail getProjectDetail(Long userId, Long groupId) {
+        return projectMapper.getProjectDetail(userId, groupId);
     }
 
     public String getUserSubDomain(Long userId, Long groupId){

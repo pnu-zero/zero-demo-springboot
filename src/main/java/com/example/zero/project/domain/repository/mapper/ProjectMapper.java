@@ -23,7 +23,7 @@ public interface ProjectMapper {
 
     Long createProject(ProjectDto projectDto);
 
-    ProjectDetail getProjectDetail(Long id);
+    ProjectDetail getProjectDetail(Long userId, Long groupId);
 
     int updateProjectRole(Long projectId, GroupAuthority role);
 

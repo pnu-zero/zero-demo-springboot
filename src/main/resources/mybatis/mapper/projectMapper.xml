@@ -4,7 +4,7 @@
 
 <mapper namespace="com.example.zero.project.domain.repository.mapper.ProjectMapper">
     <select id="getProjectDetail" parameterType="Long" resultType="com.example.zero.project.domain.model.ProjectDetail">
-        SELECT id, title, `desc`, sub_domain, static_file_name, dynamic_file_name FROM project WHERE id = #{id}
+        SELECT id, title, `desc`, sub_domain, static_file_name, dynamic_file_name FROM project WHERE user_id = #{userId} AND group_id = #{groupId}
     </select>
 
     <insert id="createProject" parameterType="com.example.zero.project.domain.model.ProjectDto" useGeneratedKeys="true" keyProperty="id">

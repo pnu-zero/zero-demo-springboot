@@ -60,8 +60,13 @@ public class ProjectController {
 
     @GetMapping
     @LoginRequired
-    public ResponseEntity<ProjectDetail> getProjectDetail(@RequestParam("id") Long id){
-        ProjectDetail projectDetail = projectService.getProjectDetail(id);
+    public ResponseEntity<ProjectDetail> getProjectDetail(HttpSession session){
+        Long userId = SessionUtils.getLoginUserId(session);
+        Long groupId =  SessionUtils.getLoginUserGroupId(session);
+        ProjectDetail projectDetail = projectService.getProjectDetail(userId, groupId);
+        if(Objects.isNull(projectDetail)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
         return ResponseEntity.status(HttpStatus.OK).body(projectDetail);
     }
 

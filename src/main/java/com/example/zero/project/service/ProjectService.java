@@ -67,8 +67,8 @@ public class ProjectService {
         return Project.from(responseProjectDto);
     }
 
-    public ProjectDetail getProjectDetail(Long id) {
-        return projectRepository.getProjectDetail(id);
+    public ProjectDetail getProjectDetail(Long userId, Long groupId) {
+        return projectRepository.getProjectDetail(userId, groupId);
     }
 
     public void validateSubdomain(String subdomain) {
