@@ -1,2 +1,12 @@
 ### Secret ###
 application.yml
+
+### intellij
+.idea
+
+### etc
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+project_files/
