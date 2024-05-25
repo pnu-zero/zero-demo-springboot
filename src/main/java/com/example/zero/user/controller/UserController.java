@@ -1,22 +1,20 @@
 package com.example.zero.user.controller;
 
 import com.example.zero.annotation.LoginRequired;
+import com.example.zero.deployment.service.DeployService;
 import com.example.zero.user.domain.model.LoginRequestDto;
 import com.example.zero.user.domain.model.User;
 import com.example.zero.user.domain.model.SignUpRequestDto;
 import com.example.zero.user.service.UserService;
+import com.example.zero.utils.SessionUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +22,7 @@ import java.net.UnknownHostException;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
+    private final DeployService deployService;
 
     @PostMapping("/signup")
     public ResponseEntity<Long> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto, @RequestParam(value = "group_id", required = false) Long groupId) throws Exception {
@@ -47,29 +46,35 @@ public class UserController {
         String password = loginRequest.getPassword();
         User user = userService.authenticateUser(email, password);
 
-        if(user != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("USER", user);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } else {
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials.");
         }
+
+        HttpSession session = request.getSession();
+        session.setAttribute("USER", user);
+        String userDomain = deployService.getUserDomain(user);
+
+        if (userDomain != null) {
+            deployService.pushSessionDomain(session.getId(), userDomain, user.getUser_role());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PostMapping("api/user/logout")
+    @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/api/user")
+    @GetMapping
     @LoginRequired
     public ResponseEntity<User> getUser(HttpSession session) {
         User user = (User) session.getAttribute("USER");
         return ResponseEntity.ok().body(user);
     }
 
-    @PutMapping("/api/user/edit")
+    @PutMapping("/edit")
     @LoginRequired
     public ResponseEntity<User> editUser() {
         return ResponseEntity.ok().body(null);
