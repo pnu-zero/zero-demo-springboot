@@ -29,7 +29,7 @@ public class MailService {
     private String hostAddr;
 
     private String generateActivationLink(String verificationCode, Long groupId, Long userId) throws UnknownHostException {
-        return protocol + hostAddr + ":" + port + "/api/user/activate?auth_code=" + verificationCode + "&user_id=" + userId + "&group_id=" + groupId;
+        return protocol + hostAddr + "/api/user/activate?auth_code=" + verificationCode + "&user_id=" + userId + "&group_id=" + groupId;
     }
 
     public String sendAuthMail(String clientEmail, String verificationCode, Long groupId, Long userId) throws Exception {
