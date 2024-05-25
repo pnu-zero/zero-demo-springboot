@@ -1,12 +1,17 @@
 package com.example.zero.project.service;
 
+import com.example.zero.deployment.service.DeployService;
 import com.example.zero.project.domain.model.Project;
+import com.example.zero.project.domain.model.ProjectDetail;
 import com.example.zero.project.domain.model.ProjectDto;
 import com.example.zero.group.domain.model.enums.GroupAuthority;
 import com.example.zero.project.domain.model.ProjectWithUser;
 import com.example.zero.project.domain.repository.ProjectRepository;
 import com.example.zero.project.exception.DuplicateSubDomainException;
+import com.example.zero.user.domain.model.User;
 import com.example.zero.utils.FileUtils;
+import com.example.zero.utils.SessionUtils;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
