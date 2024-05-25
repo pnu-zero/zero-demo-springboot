@@ -37,8 +37,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("계정이 활성화되었습니다.");
     }
 
-    @PostMapping("/api/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletRequest request) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletRequest request, HttpSession session_current) {
+
+        //기존 세션 파기
+        session_current.invalidate();
+
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
         User user = userService.authenticateUser(email, password);
