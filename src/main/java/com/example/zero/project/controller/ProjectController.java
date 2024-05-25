@@ -58,7 +58,7 @@ public class ProjectController {
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping
+    @GetMapping("/own")
     @LoginRequired
     public ResponseEntity<ProjectDetail> getProjectDetail(HttpSession session){
         Long userId = SessionUtils.getLoginUserId(session);
