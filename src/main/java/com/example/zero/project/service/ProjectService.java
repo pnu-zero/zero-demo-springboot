@@ -5,6 +5,7 @@ import com.example.zero.project.domain.model.ProjectDto;
 import com.example.zero.group.domain.model.enums.GroupAuthority;
 import com.example.zero.project.domain.model.ProjectWithUser;
 import com.example.zero.project.domain.repository.ProjectRepository;
+import com.example.zero.project.exception.DuplicateSubDomainException;
 import com.example.zero.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,16 @@ public class ProjectService {
 
     @Transactional
     public Project createProject(ProjectDto projectDto, MultipartFile staticFile, MultipartFile dynamicFile) throws IOException {
-        String generatedStaticFilePath = FileUtils.generateFilePath(projectDto, FileUtils.STATIC_FILE_DIR);
-        String staticFileSrc = FileUtils.uploadStaticFile(generatedStaticFilePath, staticFile);
+
+        validateSubdomain(projectDto.getSub_domain());
+
+        String generatedStaticFilePath = FileUtils.generateFilePath(FileUtils.STATIC_FILE_DIR);
+        String staticFileSrc = FileUtils.uploadStaticFile(generatedStaticFilePath, staticFile, projectDto.getSub_domain());
         String dynamicFileSrc = "";
-        if (dynamicFile != null) {
-            String generatedDynamicFilePath = FileUtils.generateFilePath(projectDto, FileUtils.DYNAMIC_FILE_DIR);
-            dynamicFileSrc = FileUtils.uploadStaticFile(generatedDynamicFilePath, dynamicFile);
+
+        if (!dynamicFile.isEmpty()) {
+            String generatedDynamicFilePath = FileUtils.generateFilePath(FileUtils.DYNAMIC_FILE_DIR);
+            dynamicFileSrc = FileUtils.uploadStaticFile(generatedDynamicFilePath, dynamicFile, projectDto.getSub_domain());
         }
 
         projectDto.setStatic_file_src(staticFileSrc);
@@ -35,6 +40,12 @@ public class ProjectService {
         ProjectDto responseProjectDto = projectRepository.createProject(projectDto);
 
         return Project.from(responseProjectDto);
+    }
+
+    public void validateSubdomain(String subdomain) {
+        if (projectRepository.isDuplicateSubdomainExist(subdomain) > 0){
+            throw new DuplicateSubDomainException("중복되는 도메인이 존재합니다");
+        }
     }
 
     public List<ProjectWithUser> getProjectListByGroupId(Long groupId){
