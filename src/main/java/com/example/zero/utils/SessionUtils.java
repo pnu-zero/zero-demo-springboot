@@ -27,4 +27,12 @@ public class SessionUtils {
         return LoginedUser.getUser_role() == UserRole.Admin;
     }
 
+    public static User getLoginUser(HttpSession session) {
+        return (User) session.getAttribute(LOGIN_USER);
+    }
+
+    public static String getUserSessionKey(HttpSession session) {
+        return session.getId();
+    }
+
 }
