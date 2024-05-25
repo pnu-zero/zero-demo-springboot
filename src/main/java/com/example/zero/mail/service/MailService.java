@@ -23,10 +23,12 @@ public class MailService {
     @Value("${server.port}")
     private String port;
 
-    private final String protocol = "http://";
+    private final String protocol = "https://";
+
+    @Value("${spring.mail-host}")
+    private String hostAddr;
 
     private String generateActivationLink(String verificationCode, Long groupId, Long userId) throws UnknownHostException {
-        String hostAddr = InetAddress.getLocalHost().getHostAddress();
         return protocol + hostAddr + ":" + port + "/api/user/activate?auth_code=" + verificationCode + "&user_id=" + userId + "&group_id=" + groupId;
     }
 

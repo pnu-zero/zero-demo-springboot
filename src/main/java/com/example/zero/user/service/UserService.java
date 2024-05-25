@@ -13,6 +13,7 @@ import com.example.zero.user.exception.InvalidRegisterException;
 import com.example.zero.user.exception.LoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ import java.util.UUID;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
+
+    @Qualifier("defaultRedisTemplate")
     private final RedisTemplate<String, String> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;

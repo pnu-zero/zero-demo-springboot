@@ -40,7 +40,9 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletRequest request, HttpSession session_current) {
 
         //기존 세션 파기
-        session_current.invalidate();
+        if(session_current != null) {
+            session_current.invalidate();
+        }
 
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
