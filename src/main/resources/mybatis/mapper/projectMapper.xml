@@ -3,6 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.zero.project.domain.repository.mapper.ProjectMapper">
+    <select id="getProjectDetail" parameterType="Long" resultType="com.example.zero.project.domain.model.ProjectDetail">
+        SELECT id, title, `desc`, sub_domain, static_file_name, dynamic_file_name FROM project WHERE id = #{id}
+    </select>
+
     <insert id="createProject" parameterType="com.example.zero.project.domain.model.ProjectDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_src}, #{dynamic_file_src}, now(), now())
     </insert>

@@ -1,5 +1,6 @@
 package com.example.zero.project.domain.repository;
 
+import com.example.zero.project.domain.model.ProjectDetail;
 import com.example.zero.project.domain.model.ProjectDto;
 import com.example.zero.group.domain.model.enums.GroupAuthority;
 import com.example.zero.project.domain.model.ProjectWithUser;
@@ -13,6 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectRepository {
     private final ProjectMapper projectMapper;
+
+    public ProjectDetail getProjectDetail(Long id) {
+        return projectMapper.getProjectDetail(id);
+    }
 
     public List<ProjectWithUser> getProjectListByGroupId(Long groupId) {
         return projectMapper.getProjectsByGroupId(groupId);

@@ -67,6 +67,10 @@ public class ProjectService {
         return Project.from(responseProjectDto);
     }
 
+    public ProjectDetail getProjectDetail(Long id) {
+        return projectRepository.getProjectDetail(id);
+    }
+
     public void validateSubdomain(String subdomain) {
         if (projectRepository.isDuplicateSubdomainExist(subdomain) > 0){
             throw new DuplicateSubDomainException("중복되는 도메인이 존재합니다");

@@ -18,6 +18,8 @@ public interface ProjectMapper {
 
     Long createProject(ProjectDto projectDto);
 
+    ProjectDetail getProjectDetail(Long id);
+
     int updateProjectRole(Long projectId, GroupAuthority role);
 
     void deleteProject(Long projectId);

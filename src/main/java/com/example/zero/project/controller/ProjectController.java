@@ -3,14 +3,17 @@ package com.example.zero.project.controller;
 import com.example.zero.annotation.AdminRoleRequired;
 import com.example.zero.annotation.LoginRequired;
 import com.example.zero.project.domain.model.Project;
+import com.example.zero.project.domain.model.ProjectDetail;
 import com.example.zero.project.domain.model.ProjectDto;
 import com.example.zero.group.domain.model.enums.GroupAuthority;
 import com.example.zero.project.exception.InvalidGroupIdRequestException;
+import com.example.zero.project.exception.NoSearchedContentException;
 import com.example.zero.project.service.ProjectService;
 import com.example.zero.project.domain.model.ProjectWithUser;
 import com.example.zero.utils.SessionUtils;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/project")
+@Slf4j
 public class ProjectController {
     private final ProjectService projectService;
 
@@ -33,7 +37,7 @@ public class ProjectController {
         Long groupId =  SessionUtils.getLoginUserGroupId(session);
         projectDto.setUser_id(userId);
         projectDto.setGroup_id(groupId);
-        Project createdProject = projectService.createProject(projectDto, staticFile, dynamicFile);
+        Project createdProject = projectService.createProject(session, projectDto, staticFile, dynamicFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
     }
 
@@ -42,6 +46,13 @@ public class ProjectController {
     public ResponseEntity<Boolean> validateDomain(@RequestParam("domain") String domain) {
         projectService.validateSubdomain(domain);
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping
+    @LoginRequired
+    public ResponseEntity<ProjectDetail> getProjectDetail(@RequestParam("id") Long id){
+        ProjectDetail projectDetail = projectService.getProjectDetail(id);
+        return ResponseEntity.status(HttpStatus.OK).body(projectDetail);
     }
 
     @GetMapping("/find_by_group")
