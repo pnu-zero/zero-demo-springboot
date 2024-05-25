@@ -27,6 +27,10 @@ public class ProjectRepository {
         return projectMapper.getProjectsByGroupId(groupId);
     }
 
+    public List<ProjectWithUser> searchProjects(String query){
+        return projectMapper.searchProjects(query);
+    }
+
     public List<ProjectWithUser> getProjectListByUserId(Long userId) {
         return projectMapper.getProjectsByUserId(userId);
     }

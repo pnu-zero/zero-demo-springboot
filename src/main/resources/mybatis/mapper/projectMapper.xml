@@ -11,6 +11,24 @@
         INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_name}, #{static_file_src}, #{dynamic_file_name}, #{dynamic_file_src}, now(), now())
     </insert>
 
+    <select id="searchProjects" parameterType="String" resultType="com.example.zero.project.domain.model.ProjectWithUser">
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.desc AS `desc`,
+            p.sub_domain AS sub_domain,
+            u.student_id AS student_id,
+            u.name AS name
+        FROM
+            project p
+            JOIN
+            user u ON p.user_id = u.id
+        WHERE
+            u.name LIKE CONCAT('%', #{query}, '%')
+           OR u.student_id LIKE CONCAT('%', #{query}, '%')
+           OR p.title LIKE CONCAT('%', #{query}, '%')
+    </select>
+
     <select id="selectSubDomain" parameterType="String" resultType="int">
         SELECT COUNT(*) FROM project WHERE sub_domain = #{subDomain}
     </select>

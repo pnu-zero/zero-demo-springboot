@@ -41,6 +41,16 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
     }
 
+    @GetMapping("/search")
+    @LoginRequired
+    public ResponseEntity<List<ProjectWithUser>> searchProjects(@RequestParam("query") String query){
+        List<ProjectWithUser> result = projectService.searchProjectsByQuery(query);
+        if(result.isEmpty()){
+            throw new NoSearchedContentException("검색 결과가 존재하지 않습니다.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("/validate_domain")
     @LoginRequired
     public ResponseEntity<Boolean> validateDomain(@RequestParam("domain") String domain) {

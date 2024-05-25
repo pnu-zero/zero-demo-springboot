@@ -77,6 +77,11 @@ public class ProjectService {
         }
     }
 
+    public List<ProjectWithUser> searchProjectsByQuery(String query){
+        return projectRepository.searchProjects(query);
+    }
+
+
     public List<ProjectWithUser> getProjectListByGroupId(Long groupId){
         return projectRepository.getProjectListByGroupId(groupId);
     }
