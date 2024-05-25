@@ -19,23 +19,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final DeployService deployService;
 
     @Transactional
-    public Project createProject(ProjectDto projectDto, MultipartFile staticFile, MultipartFile dynamicFile) throws IOException {
+    public Project createProject(HttpSession session, ProjectDto projectDto, MultipartFile staticFile, MultipartFile dynamicFile) throws IOException {
 
+        // 중복되는 서브 도메인이 있는지 체크
         validateSubdomain(projectDto.getSub_domain());
 
+        // Static File 저장 경로 생성
         String generatedStaticFilePath = FileUtils.generateFilePath(FileUtils.STATIC_FILE_DIR);
+
+        // Static File 이름을 DTO 에 저장
+        projectDto.setStatic_file_name(staticFile.getOriginalFilename());
+
+        // Static File 서버 내에 저장
         String staticFileSrc = FileUtils.uploadStaticFile(generatedStaticFilePath, staticFile, projectDto.getSub_domain());
+
+        // Static Domain Redis push
+        deployService.pushStaticDomain(projectDto.getSub_domain());
+
         String dynamicFileSrc = "";
 
-        if (!dynamicFile.isEmpty()) {
+        if (!(dynamicFile == null || dynamicFile.isEmpty() || dynamicFile.getSize() == 0)) {
             String generatedDynamicFilePath = FileUtils.generateFilePath(FileUtils.DYNAMIC_FILE_DIR);
+            projectDto.setDynamic_file_name(dynamicFile.getOriginalFilename());
             dynamicFileSrc = FileUtils.uploadStaticFile(generatedDynamicFilePath, dynamicFile, projectDto.getSub_domain());
+
+            // Dynamic Domain Redis push
+            deployService.pushDynamicDomain(projectDto.getSub_domain());
         }
 
         projectDto.setStatic_file_src(staticFileSrc);
         projectDto.setDynamic_file_src(dynamicFileSrc);
+
+        // SessionDomain 업데이트
+        User user = SessionUtils.getLoginUser(session);
+        deployService.pushSessionDomain(SessionUtils.getUserSessionKey(session), projectDto.getSub_domain(), user.getUser_role());
 
         ProjectDto responseProjectDto = projectRepository.createProject(projectDto);
 
