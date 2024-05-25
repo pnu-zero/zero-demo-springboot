@@ -42,7 +42,7 @@ public class FileUtils {
             fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
 
-        if (!fileExtension.equals(".zip") && !fileExtension.equals(".tar")) {
+        if (!fileExtension.equals(".zip")) {
             throw new InvalidFileExtensionException("올바른 파일 형식이 아닙니다.");
         }
 
