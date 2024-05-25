@@ -3,6 +3,7 @@ package com.example.zero.base;
 import com.example.zero.project.exception.DuplicateSubDomainException;
 import com.example.zero.project.exception.InvalidFileExtensionException;
 import com.example.zero.project.exception.InvalidGroupIdRequestException;
+import com.example.zero.project.exception.NoSearchedContentException;
 import com.example.zero.user.exception.ActivationFailedException;
 import com.example.zero.user.exception.InvalidRegisterException;
 import com.example.zero.user.exception.LoginException;
@@ -67,5 +68,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleInvalidFileExtensionException(InvalidFileExtensionException ex) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({NoSearchedContentException.class})
+    public ResponseEntity<ExceptionResponse> handleNoSearchedContentException(NoSearchedContentException ex) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NO_CONTENT);
     }
 }
