@@ -8,7 +8,7 @@
     </select>
 
     <insert id="createProject" parameterType="com.example.zero.project.domain.model.ProjectDto" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_src}, #{dynamic_file_src}, now(), now())
+        INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_name}, #{static_file_src}, #{dynamic_file_name}, #{dynamic_file_src}, now(), now())
     </insert>
 
     <select id="selectSubDomain" parameterType="String" resultType="int">

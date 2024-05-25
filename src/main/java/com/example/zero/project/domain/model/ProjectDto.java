@@ -25,7 +25,11 @@ public class ProjectDto {
     @NotBlank(message = "서브 도메인은 필수 항목입니다.")
     private final String sub_domain;
 
+    private String static_file_name;
+
     private String static_file_src;
+
+    private String dynamic_file_name;
 
     private String dynamic_file_src;
 }
