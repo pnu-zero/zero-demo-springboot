@@ -37,6 +37,13 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
     }
 
+    @GetMapping("/validate_domain")
+    @LoginRequired
+    public ResponseEntity<Boolean> validateDomain(@RequestParam("domain") String domain) {
+        projectService.validateSubdomain(domain);
+        return ResponseEntity.ok(true);
+    }
+
     @GetMapping("/find_by_group")
     @LoginRequired
     public ResponseEntity<?> getAllProjectByGroup(HttpSession session, @RequestParam("group_id") Long groupId){

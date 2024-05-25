@@ -27,7 +27,7 @@ public class ProjectRepository {
         return projectDto;
     }
 
-    public boolean isDuplicateSubdomainExist(String subDomain){
+    public int isDuplicateSubdomainExist(String subDomain){
         return projectMapper.selectSubDomain(subDomain);
     }
 

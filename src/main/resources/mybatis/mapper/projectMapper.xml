@@ -7,8 +7,8 @@
         INSERT INTO project VALUES (0, #{user_id}, #{group_id}, #{title}, #{desc}, #{sub_domain}, #{static_file_src}, #{dynamic_file_src}, now(), now())
     </insert>
 
-    <select id="selectSubDomain" parameterType="String" resultType="Long">
-        SELECT IFNULL(sub_domain, 0) FROM project WHERE sub_domain = #{subDomain}
+    <select id="selectSubDomain" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM project WHERE sub_domain = #{subDomain}
     </select>
 
     <select id="getProjectsByUserId" parameterType="Long" resultType="com.example.zero.project.domain.model.ProjectWithUser">

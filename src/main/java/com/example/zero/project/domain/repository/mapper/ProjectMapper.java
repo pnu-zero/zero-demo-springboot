@@ -14,7 +14,7 @@ public interface ProjectMapper {
 
     List<ProjectWithUser> getProjectsByUserId(Long userId);
 
-    boolean selectSubDomain(String subDomain);
+    int selectSubDomain(String subDomain);
 
     Long createProject(ProjectDto projectDto);
 
