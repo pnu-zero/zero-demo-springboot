@@ -15,6 +15,10 @@
         SELECT COUNT(*) FROM project WHERE sub_domain = #{subDomain}
     </select>
 
+    <select id="getUserSubDomain" parameterType="HashMap" resultType="String">
+        SELECT sub_domain FROM project WHERE user_id = #{userId} AND group_id = #{groupId}
+    </select>
+
     <select id="getProjectsByUserId" parameterType="Long" resultType="com.example.zero.project.domain.model.ProjectWithUser">
         SELECT p.id, p.user_id, p.group_id, p.title, p.`desc`, p.sub_domain, u.student_id, u.name
         FROM project AS p

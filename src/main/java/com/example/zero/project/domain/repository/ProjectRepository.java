@@ -19,6 +19,10 @@ public class ProjectRepository {
         return projectMapper.getProjectDetail(id);
     }
 
+    public String getUserSubDomain(Long userId, Long groupId){
+        return projectMapper.getUserSubDomain(userId, groupId);
+    }
+
     public List<ProjectWithUser> getProjectListByGroupId(Long groupId) {
         return projectMapper.getProjectsByGroupId(groupId);
     }

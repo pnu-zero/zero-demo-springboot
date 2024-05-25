@@ -16,6 +16,8 @@ public interface ProjectMapper {
 
     int selectSubDomain(String subDomain);
 
+    String getUserSubDomain(Long userId, Long groupId);
+
     Long createProject(ProjectDto projectDto);
 
     ProjectDetail getProjectDetail(Long id);
